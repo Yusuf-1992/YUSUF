@@ -1,0 +1,635 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0d0f14;--bg2:#13161d;--bg3:#1a1e27;--bg4:#20253100;
+    --border:#ffffff0f;--border2:#ffffff18;
+    --text:#f0f2f7;--text2:#8892a4;--text3:#4a5568;
+    --green:#00e5a0;--green2:#00b87a;--green3:#00e5a020;
+    --blue:#4f8ef7;--blue2:#3a7df0;--blue3:#4f8ef720;
+    --pink:#f75e8e;--pink2:#e04d7e;--pink3:#f75e8e20;
+    --amber:#f7b731;--amber2:#e0a520;--amber3:#f7b73120;
+    --purple:#9b6ff7;--purple2:#8a5ee0;--purple3:#9b6ff720;
+    --r:12px;--r2:8px;--r3:20px;
+    --font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;
+  }
+  body{
+  position:relative;
+  background:url("e.jpg") center/cover no-repeat fixed;
+  color:var(--text);
+  font-family:var(--font-body);
+  font-size:14px;
+  min-height:100vh;
+  overflow-x:hidden
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.55);
+  z-index:-1;
+}
+
+.shell{
+  position:relative;
+  z-index:1;
+  display:flex;
+  min-height:100vh;
+  background:transparent;
+}
+
+  /* SIDEBAR */
+.sidebar{
+  width:220px;
+  min-width:220px;
+  background:rgba(19,22,29,0.65);
+  backdrop-filter:blur(10px);
+  border-right:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+}
+  .logo{padding:20px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+  .logo-icon{width:32px;height:32px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center}
+  .logo-icon svg{width:18px;height:18px}
+  .logo-name{font-family:var(--font-head);font-size:15px;font-weight:700;letter-spacing:-.3px}
+  .logo-sub{font-size:10px;color:var(--text2);letter-spacing:.5px;text-transform:uppercase;margin-top:1px}
+  .nav{flex:1;padding:12px 8px;overflow-y:auto}
+  .nav-section{font-size:10px;color:var(--text3);letter-spacing:.8px;text-transform:uppercase;padding:12px 12px 6px;font-weight:500}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--r2);cursor:pointer;color:var(--text2);font-size:13px;font-weight:400;transition:all .15s;margin-bottom:1px}
+  .nav-item:hover{background:var(--border);color:var(--text)}
+  .nav-item.active{background:var(--green3);color:var(--green);font-weight:500}
+  .nav-item.active .nav-dot{background:var(--green)}
+  .nav-dot{width:5px;height:5px;border-radius:50%;background:var(--text3);flex-shrink:0}
+  .nav-badge{margin-left:auto;background:var(--pink3);color:var(--pink);font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500}
+  .sidebar-footer{padding:12px 16px;border-top:1px solid var(--border)}
+  .avatar-row{display:flex;align-items:center;gap:10px}
+  .avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0}
+  .avatar-info{flex:1;min-width:0}
+  .avatar-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .avatar-role{font-size:11px;color:var(--text2)}
+
+  /* MAIN */
+  .main{
+  flex:1;
+  overflow-y:auto;
+  background:transparent;
+  min-width:0
+}
+  .topbar{display:flex;align-items:center;gap:12px;padding:16px 24px;border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:10}
+  .page-title{font-family:var(--font-head);font-size:18px;font-weight:700;flex:1}
+  .search-box{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:7px 12px;width:220px}
+  .search-box input{background:none;border:none;outline:none;color:var(--text);font-size:13px;font-family:var(--font-body);width:100%}
+  .search-box input::placeholder{color:var(--text3)}
+  .topbar-btn{width:34px;height:34px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
+  .notif-dot{position:absolute;top:6px;right:7px;width:6px;height:6px;background:var(--pink);border-radius:50%;border:1.5px solid var(--bg)}
+  .period-select{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:6px 12px;color:var(--text2);font-size:12px;font-family:var(--font-body);outline:none;cursor:pointer}
+
+  .content{padding:20px 24px;display:flex;flex-direction:column;gap:20px}
+
+  /* STAT CARDS */
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px}
+  .stat-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .stat-label{font-size:11px;color:var(--text2);font-weight:500;letter-spacing:.3px;text-transform:uppercase}
+  .stat-icon{width:32px;height:32px;border-radius:var(--r2);display:flex;align-items:center;justify-content:center}
+  .stat-val{font-size:22px;font-weight:700;letter-spacing:-0.5px;margin-bottom:0;line-height:1.2;}
+  .stat-trend{display:flex;align-items:center;gap:4px;font-size:11px}
+  .up{color:var(--green)}
+  .down{color:var(--pink)}
+  .trend-base{color:var(--text3)}
+
+  /* CHARTS ROW */
+  .charts-row{display:grid;grid-template-columns:1.6fr 1fr;gap:16px}
+  .chart-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+  .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+  .card-title{font-family:var(--font-head);font-size:14px;font-weight:600}
+  .card-sub{font-size:11px;color:var(--text2);margin-top:2px}
+  .legend-row{display:flex;gap:14px;margin-bottom:12px}
+  .leg{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2)}
+  .leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+  .tab-pills{display:flex;gap:4px}
+  .pill{font-size:11px;padding:4px 10px;border-radius:20px;cursor:pointer;border:1px solid transparent;color:var(--text2);transition:all .15s}
+  .pill.active{background:var(--green3);color:var(--green);border-color:var(--green3)}
+
+  /* DONUT side */
+  .donut-wrap{position:relative;display:flex;align-items:center;justify-content:center;margin:8px 0}
+  .donut-center{position:absolute;text-align:center}
+  .donut-center .big{font-family:var(--font-head);font-size:20px;font-weight:700}
+  .donut-center .small{font-size:11px;color:var(--text2)}
+  .donut-legend{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+  .donut-leg-item{display:flex;align-items:center;justify-content:space-between;font-size:12px}
+  .donut-leg-left{display:flex;align-items:center;gap:8px;color:var(--text2)}
+  .donut-leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .donut-leg-val{font-weight:500;color:var(--text)}
+
+  /* BOTTOM ROW */
+  .bottom-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+
+  /* TABLE card */
+  .table-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px;grid-column:1/-1}
+  .product-table{width:100%;border-collapse:collapse}
+  .product-table th{font-size:10px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;text-align:left;padding:0 0 10px;border-bottom:1px solid var(--border);font-weight:500}
+  .product-table th:not(:first-child){text-align:right}
+  .product-table td{padding:10px 0;border-bottom:1px solid var(--border);vertical-align:middle}
+  .product-table td:not(:first-child){text-align:right}
+  .product-table tr:last-child td{border-bottom:none}
+  .prod-img{width:34px;height:34px;border-radius:var(--r2);object-fit:cover;background:var(--bg3)}
+  .prod-info{flex:1}
+  .prod-name{font-size:13px;font-weight:500;color:var(--text)}
+  .prod-cat{font-size:11px;color:var(--text2)}
+  .prod-cell{display:flex;align-items:center;gap:10px}
+  .badge{font-size:10px;padding:3px 8px;border-radius:20px;font-weight:500}
+  .badge-up{background:var(--green3);color:var(--green)}
+  .badge-down{background:var(--pink3);color:var(--pink)}
+  .badge-mid{background:var(--amber3);color:var(--amber)}
+  .score-bar{height:4px;border-radius:2px;background:var(--bg3);width:60px;overflow:hidden;display:inline-block}
+  .score-fill{height:100%;border-radius:2px}
+
+  /* SOCIAL card */
+  .social-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+  .social-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+  .social-item:last-child{border-bottom:none;padding-bottom:0}
+  .social-icon{width:36px;height:36px;border-radius:var(--r2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .social-meta{flex:1}
+  .social-name{font-size:13px;font-weight:500}
+  .social-sub{font-size:11px;color:var(--text2)}
+  .social-val{font-size:14px;font-weight:700;}
+  .social-trend{font-size:10px}
+  .progress-bar{height:3px;border-radius:2px;background:var(--bg3);margin-top:6px;overflow:hidden}
+  .progress-fill{height:100%;border-radius:2px}
+
+  /* Trending */
+  .trending-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+  .trend-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+  .trend-item:last-child{border-bottom:none}
+  .trend-rank{font-family:var(--font-head);font-size:16px;font-weight:700;color:var(--text3);width:20px;text-align:center;flex-shrink:0}
+  .trend-rank.top{color:var(--amber)}
+  .trend-info{flex:1;min-width:0}
+  .trend-name{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .trend-num{font-size:10px;color:var(--text2)}
+  .fire{color:var(--pink);font-size:12px}
+
+  /* sparkline mini */
+  .sparkline{display:inline-block;vertical-align:middle}
+</style>
+
+<div class="shell">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 18 18" fill="none"><path d="M3 9l4 4L15 5" stroke="#0d0f14" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div>
+        <div class="logo-name">AffiliPro</div>
+        <div class="logo-sub">Analytics Hub</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="nav-section">Main</div>
+      <div class="nav-item active">
+        <span class="nav-dot"></span>
+        Overview
+      </div>
+      <div class="nav-item">
+        <span class="nav-dot"></span>
+        Products
+        <span class="nav-badge">124</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-dot"></span>
+        Trending
+      </div>
+      <div class="nav-item">
+        <span class="nav-dot"></span>
+        Analytics
+      </div>
+      <div class="nav-section">Integrations</div>
+      <div class="nav-item">
+        <span class="nav-dot"></span>
+        Shopee Sync
+      </div>
+      <div class="nav-item">
+        <span class="nav-dot"></span>
+        Social Media
+      </div>
+      <div class="nav-section">Tools</div>
+      <div class="nav-item">
+        <span class="nav-dot"></span>
+        Categories
+      </div>
+      <div class="nav-item">
+        <span class="nav-dot"></span>
+        Reports
+      </div>
+      <div class="nav-item">
+        <span class="nav-dot"></span>
+        Settings
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="avatar-row">
+        <div class="avatar">BYS</div>
+        <div class="avatar-info">
+          <div class="avatar-name">BANG YOSS</div>
+          <div class="avatar-role">Affiliate Seller</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title">Overview Dashboard</div>
+      <div class="search-box">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#4a5568" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#4a5568" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <input placeholder="Cari produk, kategori...">
+      </div>
+      <select class="period-select">
+        <option>30 hari terakhir</option>
+        <option>7 hari terakhir</option>
+        <option>90 hari</option>
+      </select>
+      <div class="topbar-btn">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M4 8h8M6 12h4" stroke="#8892a4" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="topbar-btn">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2C5.24 2 3 4.24 3 7c0 1.7.86 3.2 2.17 4.1L4 14h8l-1.17-2.9A4.96 4.96 0 0013 7c0-2.76-2.24-5-5-5z" stroke="#8892a4" stroke-width="1.5"/></svg>
+        <div class="notif-dot"></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- STAT CARDS -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-label">Total Produk Aktif</div>
+            <div class="stat-icon" style="background:var(--blue3)">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1.5" stroke="#4f8ef7" stroke-width="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.5" stroke="#4f8ef7" stroke-width="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.5" stroke="#4f8ef7" stroke-width="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.5" stroke="#4f8ef7" stroke-width="1.5"/></svg>
+            </div>
+          </div class="stat">
+          <div class="stat-val" style="color:var(--blue)">1,248</div>
+          <div class="stat-trend">
+            <span class="up">↑ 8.4%</span>
+            <span class="trend-base">vs bulan lalu</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-label">Total Penjualan</div>
+            <div class="stat-icon" style="background:var(--green3)">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 11l4-4 3 3 5-6" stroke="#00e5a0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="stat-val" style="color:var(--green)">Rp 48,3 jt</div>
+          <div class="stat-trend">
+            <span class="up">↑ 12.1%</span>
+            <span class="trend-base">vs bulan lalu</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-label">Total Klik Affiliate</div>
+            <div class="stat-icon" style="background:var(--purple3)">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="#9b6ff7" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><circle cx="8" cy="8" r="3" stroke="#9b6ff7" stroke-width="1.5"/></svg>
+            </div>
+          </div>
+          <div class="stat-val" style="color:var(--purple)">94,512</div>
+          <div class="stat-trend">
+            <span class="up">↑ 5.7%</span>
+            <span class="trend-base">vs bulan lalu</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-label">Conversion Rate</div>
+            <div class="stat-icon" style="background:var(--amber3)">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2l1.5 4.5H14l-3.6 2.6 1.4 4.4L8 11l-3.8 2.5 1.4-4.4L2 6.5h4.5z" stroke="#f7b731" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="stat-val" style="color:var(--amber)">3.84%</div>
+          <div class="stat-trend">
+            <span class="down">↓ 0.3%</span>
+            <span class="trend-base">vs bulan lalu</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHARTS ROW -->
+      <div class="charts-row">
+        <!-- LINE CHART -->
+        <div class="chart-card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Tren Penjualan</div>
+              <div class="card-sub">Revenue harian — 30 hari terakhir</div>
+            </div>
+            <div class="tab-pills">
+              <div class="pill active">Harian</div>
+              <div class="pill">Mingguan</div>
+              <div class="pill">Bulanan</div>
+            </div>
+          </div>
+          <div class="legend-row">
+            <div class="leg"><div class="leg-dot" style="background:#00e5a0"></div>Penjualan</div>
+            <div class="leg"><div class="leg-dot" style="background:#4f8ef7"></div>Klik</div>
+          </div>
+          <div style="position:relative;width:100%;height:180px">
+            <canvas id="lineChart"></canvas>
+          </div>
+        </div>
+        <!-- DONUT -->
+        <div class="chart-card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Kategori Produk</div>
+              <div class="card-sub">Distribusi penjualan</div>
+            </div>
+          </div>
+          <div class="donut-wrap" style="height:140px">
+            <canvas id="donutChart" style="max-height:140px;max-width:140px"></canvas>
+            <div class="donut-center">
+              <div class="big">68%</div>
+              <div class="small">Top 3</div>
+            </div>
+          </div>
+          <div class="donut-legend">
+            <div class="donut-leg-item"><div class="donut-leg-left"><div class="donut-leg-dot" style="background:#00e5a0"></div>Fashion</div><div class="donut-leg-val">32%</div></div>
+            <div class="donut-leg-item"><div class="donut-leg-left"><div class="donut-leg-dot" style="background:#4f8ef7"></div>Elektronik</div><div class="donut-leg-val">26%</div></div>
+            <div class="donut-leg-item"><div class="donut-leg-left"><div class="donut-leg-dot" style="background:#9b6ff7"></div>Beauty</div><div class="donut-leg-val">19%</div></div>
+            <div class="donut-leg-item"><div class="donut-leg-left"><div class="donut-leg-dot" style="background:#f7b731"></div>Lainnya</div><div class="donut-leg-val">23%</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTTOM ROW -->
+      <div class="bottom-row">
+        <!-- PRODUCT TABLE -->
+        <div class="table-card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Produk Terlaris</div>
+              <div class="card-sub">Berdasarkan penjualan bulan ini</div>
+            </div>
+            <div class="tab-pills">
+              <div class="pill active">Semua</div>
+              <div class="pill">Fashion</div>
+              <div class="pill">Elektronik</div>
+            </div>
+          </div>
+          <table class="product-table">
+            <thead>
+              <tr>
+                <th>Produk</th>
+                <th>Terjual</th>
+                <th>Klik</th>
+                <th>CVR</th>
+                <th>Score</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div class="prod-cell"><div class="prod-img" style="background:linear-gradient(135deg,#1a2a4a,#2a4a7a)"></div><div class="prod-info"><div class="prod-name">Tas Wanita Kulit Premium</div><div class="prod-cat">Fashion · Shopee</div></div></div></td>
+                <td style="font-weight:300">1,284</td>
+                <td style="color:var(--text2)">8,432</td>
+                <td style="color:var(--green)">15.2%</td>
+                <td><div class="score-bar"><div class="score-fill" style="width:92%;background:var(--green)"></div></div></td>
+                <td><span class="badge badge-up">↑ Naik</span></td>
+              </tr>
+              <tr>
+                <td><div class="prod-cell"><div class="prod-img" style="background:linear-gradient(135deg,#2a1a3a,#4a2a7a)"></div><div class="prod-info"><div class="prod-name">Earphone TWS Bluetooth 5.3</div><div class="prod-cat">Elektronik · Shopee</div></div></div></td>
+                <td style="font-weight:600">978</td>
+                <td style="color:var(--text2)">6,210</td>
+                <td style="color:var(--green)">15.7%</td>
+                <td><div class="score-bar"><div class="score-fill" style="width:85%;background:var(--blue)"></div></div></td>
+                <td><span class="badge badge-up">↑ Naik</span></td>
+              </tr>
+              <tr>
+                <td><div class="prod-cell"><div class="prod-img" style="background:linear-gradient(135deg,#3a1a2a,#7a2a4a)"></div><div class="prod-info"><div class="prod-name">Serum Vitamin C Brightening</div><div class="prod-cat">Beauty · Shopee</div></div></div></td>
+                <td style="font-weight:600">856</td>
+                <td style="color:var(--text2)">7,830</td>
+                <td style="color:var(--amber)">10.9%</td>
+                <td><div class="score-bar"><div class="score-fill" style="width:78%;background:var(--purple)"></div></div></td>
+                <td><span class="badge badge-mid">→ Stabil</span></td>
+              </tr>
+              <tr>
+                <td><div class="prod-cell"><div class="prod-img" style="background:linear-gradient(135deg,#1a3a2a,#2a7a4a)"></div><div class="prod-info"><div class="prod-name">Sandal Slop Karet Anti-slip</div><div class="prod-cat">Fashion · Shopee</div></div></div></td>
+                <td style="font-weight:600">712</td>
+                <td style="color:var(--text2)">5,100</td>
+                <td style="color:var(--pink)">13.9%</td>
+                <td><div class="score-bar"><div class="score-fill" style="width:65%;background:var(--amber)"></div></div></td>
+                <td><span class="badge badge-down">↓ Turun</span></td>
+              </tr>
+              <tr>
+                <td><div class="prod-cell"><div class="prod-img" style="background:linear-gradient(135deg,#2a3a1a,#4a7a2a)"></div><div class="prod-info"><div class="prod-name">Power Bank 20000 mAh Fast</div><div class="prod-cat">Gadget · Shopee</div></div></div></td>
+                <td style="font-weight:600">634</td>
+                <td style="color:var(--text2)">4,860</td>
+                <td style="color:var(--green)">13.0%</td>
+                <td><div class="score-bar"><div class="score-fill" style="width:60%;background:var(--green)"></div></div></td>
+                <td><span class="badge badge-up">↑ Naik</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- SOCIAL + TRENDING stacked -->
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <!-- SOCIAL -->
+          <div class="social-card">
+            <div class="card-header" style="margin-bottom:8px">
+              <div class="card-title">Social Media</div>
+              <div style="font-size:11px;color:var(--text2)">Performa bulan ini</div>
+            </div>
+            <div class="social-item">
+              <div class="social-icon" style="background:#e1306c20">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#e1306c"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+              </div>
+              <div class="social-meta">
+                <div class="social-name">Instagram</div>
+                <div class="progress-bar"><div class="progress-fill" style="width:82%;background:#e1306c"></div></div>
+              </div>
+              <div style="text-align:right">
+                <div class="social-val">28.4K</div>
+                <div class="social-trend up">↑ 14%</div>
+              </div>
+            </div>
+            <div class="social-item">
+              <div class="social-icon" style="background:#fe253920">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#fe2539"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.67a8.27 8.27 0 004.83 1.54V6.72a4.85 4.85 0 01-1.06-.03z"/></svg>
+              </div>
+              <div class="social-meta">
+                <div class="social-name">TikTok</div>
+                <div class="progress-bar"><div class="progress-fill" style="width:91%;background:#fe2539"></div></div>
+              </div>
+              <div style="text-align:right">
+                <div class="social-val">61.2K</div>
+                <div class="social-trend up">↑ 31%</div>
+              </div>
+            </div>
+            <div class="social-item">
+              <div class="social-icon" style="background:#ff000020">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#ff0000"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+              </div>
+              <div class="social-meta">
+                <div class="social-name">YouTube</div>
+                <div class="progress-bar"><div class="progress-fill" style="width:56%;background:#ff0000"></div></div>
+              </div>
+              <div style="text-align:right">
+                <div class="social-val">12.8K</div>
+                <div class="social-trend up">↑ 6%</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TRENDING -->
+          <div class="trending-card">
+            <div class="card-header" style="margin-bottom:8px">
+              <div class="card-title">Trending Sekarang</div>
+              <div style="font-size:11px;color:var(--pink)">● Live</div>
+            </div>
+            <div class="trend-item">
+              <div class="trend-rank top">1</div>
+              <div class="trend-info">
+                <div class="trend-name">Dress Korean Style</div>
+                <div class="trend-num">4,210 terjual hari ini</div>
+              </div>
+              <span class="fire">🔥</span>
+            </div>
+            <div class="trend-item">
+              <div class="trend-rank top">2</div>
+              <div class="trend-info">
+                <div class="trend-name">Lip Cream Matte Lokal</div>
+                <div class="trend-num">3,830 terjual hari ini</div>
+              </div>
+              <span class="fire">🔥</span>
+            </div>
+            <div class="trend-item">
+              <div class="trend-rank top">3</div>
+              <div class="trend-info">
+                <div class="trend-name">Celana Cargo Pria</div>
+                <div class="trend-num">2,940 terjual hari ini</div>
+              </div>
+            </div>
+            <div class="trend-item">
+              <div class="trend-rank">4</div>
+              <div class="trend-info">
+                <div class="trend-name">Skincare BPOM Terbaru</div>
+                <div class="trend-num">2,110 terjual hari ini</div>
+              </div>
+            </div>
+            <div class="trend-item">
+              <div class="trend-rank">5</div>
+              <div class="trend-info">
+                <div class="trend-name">Charger GaN 65W</div>
+                <div class="trend-num">1,870 terjual hari ini</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end content -->
+  </div><!-- end main -->
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const days = ['1','3','5','7','9','11','13','15','17','19','21','23','25','27','29'];
+const sales = [12,18,15,22,19,28,24,32,27,35,30,38,34,42,48];
+const clicks = [40,55,48,62,57,74,68,82,75,90,84,96,88,105,112];
+
+new Chart(document.getElementById('lineChart'), {
+  type: 'line',
+  data: {
+    labels: days,
+    datasets: [
+      {
+        label: 'Penjualan (jt)',
+        data: sales,
+        borderColor: '#00e5a0',
+        backgroundColor: 'rgba(0,229,160,0.08)',
+        borderWidth: 2,
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        tension: 0.4,
+        fill: true
+      },
+      {
+        label: 'Klik (rb)',
+        data: clicks.map(v => v * 0.4),
+        borderColor: '#4f8ef7',
+        backgroundColor: 'rgba(79,142,247,0.06)',
+        borderWidth: 2,
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        tension: 0.4,
+        fill: true
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#1a1e27',
+        borderColor: '#ffffff18',
+        borderWidth: 1,
+        titleColor: '#8892a4',
+        bodyColor: '#f0f2f7',
+        padding: 10
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
+        ticks: { color: '#4a5568', font: { size: 11 } }
+      },
+      y: {
+        grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
+        ticks: { color: '#4a5568', font: { size: 11 } }
+      }
+    }
+  }
+});
+
+new Chart(document.getElementById('donutChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Fashion','Elektronik','Beauty','Lainnya'],
+    datasets: [{
+      data: [32, 26, 19, 23],
+      backgroundColor: ['#00e5a0','#4f8ef7','#9b6ff7','#f7b731'],
+      borderWidth: 0,
+      hoverOffset: 4
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    cutout: '70%',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#1a1e27',
+        borderColor: '#ffffff18',
+        borderWidth: 1,
+        titleColor: '#8892a4',
+        bodyColor: '#f0f2f7'
+      }
+    }
+  }
+});
+
+document.querySelectorAll('.pill').forEach(p => {
+  p.addEventListener('click', function() {
+    this.closest('.tab-pills').querySelectorAll('.pill').forEach(x => x.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
