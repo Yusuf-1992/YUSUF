@@ -192,11 +192,11 @@ body::before{
         <span class="nav-dot"></span>
         Overview
       </div>
-      <div class="nav-item">
-        <span class="nav-dot"></span>
+      <a class="nav-item" href="products.html" style="text-decoration:none">
+      <span class="nav-dot"></span>
         Products
-        <span class="nav-badge">124</span>
-      </div>
+      <span class="nav-badge">124</span>
+      </a>
       <div class="nav-item">
         <span class="nav-dot"></span>
         Trending
@@ -271,9 +271,9 @@ body::before{
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1.5" stroke="#4f8ef7" stroke-width="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.5" stroke="#4f8ef7" stroke-width="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.5" stroke="#4f8ef7" stroke-width="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.5" stroke="#4f8ef7" stroke-width="1.5"/></svg>
             </div>
           </div class="stat">
-          <div class="stat-val" style="color:var(--blue)">1,248</div>
+          <div class="stat-val" id="stat-total-products" style="color:var(--blue)">1,248</div>
           <div class="stat-trend">
-            <span class="up">↑ 8.4%</span>
+            <span id="trend-products" class="up">↑ 8.4%</span>
             <span class="trend-base">vs bulan lalu</span>
           </div>
         </div>
@@ -284,9 +284,9 @@ body::before{
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 11l4-4 3 3 5-6" stroke="#00e5a0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
           </div>
-          <div class="stat-val" style="color:var(--green)">Rp 48,3 jt</div>
+          <div class="stat-val" id="stat-total-sales" style="color:var(--green)">Rp 48,3 jt</div>
           <div class="stat-trend">
-            <span class="up">↑ 12.1%</span>
+            <span id="trend-sales" class="up">↑ 12.1%</span>
             <span class="trend-base">vs bulan lalu</span>
           </div>
         </div>
@@ -297,9 +297,9 @@ body::before{
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="#9b6ff7" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><circle cx="8" cy="8" r="3" stroke="#9b6ff7" stroke-width="1.5"/></svg>
             </div>
           </div>
-          <div class="stat-val" style="color:var(--purple)">94,512</div>
+          <div class="stat-val" id="stat-total-clicks" style="color:var(--purple)">94,512</div>
           <div class="stat-trend">
-            <span class="up">↑ 5.7%</span>
+            <span id="trend-clicks" class="up">↑ 5.7%</span>
             <span class="trend-base">vs bulan lalu</span>
           </div>
         </div>
@@ -310,9 +310,9 @@ body::before{
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2l1.5 4.5H14l-3.6 2.6 1.4 4.4L8 11l-3.8 2.5 1.4-4.4L2 6.5h4.5z" stroke="#f7b731" stroke-width="1.5" stroke-linejoin="round"/></svg>
             </div>
           </div>
-          <div class="stat-val" style="color:var(--amber)">3.84%</div>
+          <div class="stat-val" id="stat-cvr" style="color:var(--amber)">3.84%</div>
           <div class="stat-trend">
-            <span class="down">↓ 0.3%</span>
+            <span id="trend-cvr" class="down">↓ 0.3%</span>
             <span class="trend-base">vs bulan lalu</span>
           </div>
         </div>
@@ -450,10 +450,10 @@ body::before{
               </div>
               <div class="social-meta">
                 <div class="social-name">Instagram</div>
-                <div class="progress-bar"><div class="progress-fill" style="width:82%;background:#e1306c"></div></div>
+                <div class="progress-fill" id="social-instagram-bar" style="width:82%;background:#e1306c"></div>
               </div>
               <div style="text-align:right">
-                <div class="social-val">28.4K</div>
+                <div class="social-val" id="social-instagram-val">28.4K</div>
                 <div class="social-trend up">↑ 14%</div>
               </div>
             </div>
@@ -463,10 +463,10 @@ body::before{
               </div>
               <div class="social-meta">
                 <div class="social-name">TikTok</div>
-                <div class="progress-bar"><div class="progress-fill" style="width:91%;background:#fe2539"></div></div>
+                <div class="progress-fill" id="social-tiktok-bar" style="width:91%;background:#fe2539"></div>
               </div>
               <div style="text-align:right">
-                <div class="social-val">61.2K</div>
+                <div class="social-val" id="social-tiktok-val">61.2K</div>
                 <div class="social-trend up">↑ 31%</div>
               </div>
             </div>
@@ -476,10 +476,10 @@ body::before{
               </div>
               <div class="social-meta">
                 <div class="social-name">YouTube</div>
-                <div class="progress-bar"><div class="progress-fill" style="width:56%;background:#ff0000"></div></div>
+                <div class="progress-fill" id="social-youtube-bar" style="width:56%;background:#ff0000"></div>
               </div>
               <div style="text-align:right">
-                <div class="social-val">12.8K</div>
+                <div class="social-val" id="social-youtube-val">12.8K</div>
                 <div class="social-trend up">↑ 6%</div>
               </div>
             </div>
@@ -491,7 +491,7 @@ body::before{
               <div class="card-title">Trending Sekarang</div>
               <div style="font-size:11px;color:var(--pink)">● Live</div>
             </div>
-            <div class="trend-item">
+            <div id="trending-list"></div>
               <div class="trend-rank top">1</div>
               <div class="trend-info">
                 <div class="trend-name">Dress Korean Style</div>
@@ -499,7 +499,7 @@ body::before{
               </div>
               <span class="fire">🔥</span>
             </div>
-            <div class="trend-item">
+            <div id="trending-list"></div>
               <div class="trend-rank top">2</div>
               <div class="trend-info">
                 <div class="trend-name">Lip Cream Matte Lokal</div>
@@ -507,21 +507,21 @@ body::before{
               </div>
               <span class="fire">🔥</span>
             </div>
-            <div class="trend-item">
+            <div id="trending-list"></div>
               <div class="trend-rank top">3</div>
               <div class="trend-info">
                 <div class="trend-name">Celana Cargo Pria</div>
                 <div class="trend-num">2,940 terjual hari ini</div>
               </div>
             </div>
-            <div class="trend-item">
+            <div id="trending-list"></div>
               <div class="trend-rank">4</div>
               <div class="trend-info">
                 <div class="trend-name">Skincare BPOM Terbaru</div>
                 <div class="trend-num">2,110 terjual hari ini</div>
               </div>
             </div>
-            <div class="trend-item">
+            <div id="trending-list"></div>
               <div class="trend-rank">5</div>
               <div class="trend-info">
                 <div class="trend-name">Charger GaN 65W</div>
@@ -632,4 +632,38 @@ document.querySelectorAll('.pill').forEach(p => {
     this.classList.add('active');
   });
 });
+</script>
+<script>
+
+function initDashboard(){
+
+const dashboardData = {
+products:1324,
+sales:52800000,
+clicks:103452,
+cvr:4.12,
+
+social:{
+instagram:32400,
+tiktok:71200,
+youtube:18400
+},
+
+trending:[
+{name:"Dress Korean Style",sales:4210},
+{name:"Lip Cream Matte Lokal",sales:3830},
+{name:"Celana Cargo Pria",sales:2940},
+{name:"Skincare BPOM Terbaru",sales:2110},
+{name:"Charger GaN 65W",sales:1870}
+]
+}
+
+updateStats(dashboardData)
+updateSocial(dashboardData)
+updateTrending(dashboardData)
+
+}
+
+document.addEventListener("DOMContentLoaded",initDashboard)
+
 </script>
