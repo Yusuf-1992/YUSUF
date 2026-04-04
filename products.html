@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AffiliPro — Products</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="affilipro-api.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0f14;--bg2:#13161d;--bg3:#1a1e27;
+  --border:#ffffff0f;--border2:#ffffff18;
+  --text:#f0f2f7;--text2:#8892a4;--text3:#4a5568;
+  --green:#00e5a0;--green2:#00b87a;--green3:#00e5a020;
+  --blue:#4f8ef7;--blue2:#3a7df0;--blue3:#4f8ef720;
+  --pink:#f75e8e;--pink2:#e04d7e;--pink3:#f75e8e20;
+  --amber:#f7b731;--amber2:#e0a520;--amber3:#f7b73120;
+  --purple:#9b6ff7;--purple2:#8a5ee0;--purple3:#9b6ff720;
+  --r:12px;--r2:8px;--r3:20px;
+  --font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;
+}
+body{
+  background:url("e.jpg") center/cover no-repeat fixed;
+  color:var(--text);font-family:var(--font-body);font-size:14px;
+  min-height:100vh;overflow-x:hidden;position:relative;
+}
+body::before{content:"";position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:0;}
+.shell{position:relative;z-index:1;display:flex;min-height:100vh;}
+
+/* ── SIDEBAR (sama dengan index.html) ── */
+.sidebar{width:220px;min-width:220px;background:rgba(19,22,29,0.65);backdrop-filter:blur(10px);border-right:1px solid var(--border);display:flex;flex-direction:column;}
+.logo{padding:20px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.logo-icon{width:32px;height:32px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-name{font-family:var(--font-head);font-size:15px;font-weight:700;letter-spacing:-.3px}
+.logo-sub{font-size:10px;color:var(--text2);letter-spacing:.5px;text-transform:uppercase;margin-top:1px}
+.nav{flex:1;padding:12px 8px;overflow-y:auto}
+.nav-section{font-size:10px;color:var(--text3);letter-spacing:.8px;text-transform:uppercase;padding:12px 12px 6px;font-weight:500}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--r2);cursor:pointer;color:var(--text2);font-size:13px;font-weight:400;transition:all .15s;margin-bottom:1px;text-decoration:none;}
+.nav-item:hover{background:var(--border);color:var(--text)}
+.nav-item.active{background:var(--green3);color:var(--green);font-weight:500}
+.nav-item.active .nav-dot{background:var(--green)}
+.nav-dot{width:5px;height:5px;border-radius:50%;background:var(--text3);flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--pink3);color:var(--pink);font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500}
+.sidebar-footer{padding:12px 16px;border-top:1px solid var(--border)}
+.avatar-row{display:flex;align-items:center;gap:10px}
+.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0}
+.avatar-info{flex:1;min-width:0}
+.avatar-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.avatar-role{font-size:11px;color:var(--text2)}
+
+/* ── MAIN ── */
+.main{flex:1;overflow-y:auto;background:transparent;min-width:0;}
+.topbar{display:flex;align-items:center;gap:12px;padding:16px 24px;border-bottom:1px solid var(--border);background:rgba(13,15,20,0.6);backdrop-filter:blur(8px);position:sticky;top:0;z-index:10}
+.page-title{font-family:var(--font-head);font-size:18px;font-weight:700;flex:1}
+.search-box{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:7px 12px;width:240px;transition:border .15s}
+.search-box:focus-within{border-color:var(--green2)}
+.search-box input{background:none;border:none;outline:none;color:var(--text);font-size:13px;font-family:var(--font-body);width:100%}
+.search-box input::placeholder{color:var(--text3)}
+.topbar-btn{width:34px;height:34px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s}
+.topbar-btn:hover{background:var(--border2)}
+.period-select{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:6px 12px;color:var(--text2);font-size:12px;font-family:var(--font-body);outline:none;cursor:pointer}
+
+.content{padding:20px 24px;display:flex;flex-direction:column;gap:20px}
+
+/* ── FILTER BAR ── */
+.filter-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.filter-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.cat-pills{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+.cat-pill{font-size:12px;padding:5px 14px;border-radius:20px;cursor:pointer;border:1px solid var(--border2);color:var(--text2);background:var(--bg3);transition:all .15s;white-space:nowrap}
+.cat-pill:hover{border-color:var(--green);color:var(--text)}
+.cat-pill.active{background:var(--green3);color:var(--green);border-color:var(--green)}
+.sort-select{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:6px 12px;color:var(--text2);font-size:12px;font-family:var(--font-body);outline:none;cursor:pointer}
+.view-toggle{display:flex;gap:4px}
+.view-btn{width:32px;height:32px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s}
+.view-btn.active{background:var(--green3);border-color:var(--green)}
+.view-btn.active svg path, .view-btn.active svg rect{stroke:var(--green)}
+
+/* ── STATS ROW ── */
+.mini-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.mini-stat{background:rgba(19,22,29,0.7);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;backdrop-filter:blur(6px)}
+.mini-stat-label{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
+.mini-stat-val{font-size:20px;font-weight:700;font-family:var(--font-head);letter-spacing:-0.5px}
+.mini-stat-sub{font-size:11px;color:var(--text2);margin-top:4px}
+
+/* ── PRODUCT GRID ── */
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.prod-card{background:rgba(19,22,29,0.75);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:all .2s;cursor:pointer;backdrop-filter:blur(6px);position:relative}
+.prod-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.3)}
+.prod-card-img{width:100%;aspect-ratio:1;object-fit:cover;background:var(--bg3);display:block}
+.prod-card-img-placeholder{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:40px;background:var(--bg3)}
+.prod-card-body{padding:12px}
+.prod-card-name{
+  font-size:13px;
+  font-weight:500;
+  line-height:1.4;
+  margin-bottom:4px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  line-clamp:2;
+}
+.prod-card-cat{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.prod-card-stats{display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px solid var(--border)}
+.prod-card-sold{font-size:12px;color:var(--text2)}
+.prod-card-sold span{color:var(--text);font-weight:600}
+.prod-card-cvr{font-size:11px;font-weight:600}
+.prod-card-status{position:absolute;top:10px;right:10px}
+.badge{font-size:10px;padding:3px 8px;border-radius:20px;font-weight:500}
+.badge-up{background:var(--green3);color:var(--green)}
+.badge-down{background:var(--pink3);color:var(--pink)}
+.badge-mid{background:var(--amber3);color:var(--amber)}
+.prod-card-actions{display:flex;gap:6px;padding:0 12px 12px}
+.btn-affiliate{flex:1;background:var(--green);color:#0d0f14;font-family:var(--font-body);font-size:12px;font-weight:600;border:none;border-radius:var(--r2);padding:8px;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:5px}
+.btn-affiliate:hover{background:var(--green2)}
+.btn-detail{width:34px;height:34px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s;flex-shrink:0}
+.btn-detail:hover{background:var(--border2)}
+
+/* ── LIST VIEW ── */
+.product-list{display:flex;flex-direction:column;gap:8px}
+.prod-list-item{background:rgba(19,22,29,0.75);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:14px;transition:all .15s;cursor:pointer;backdrop-filter:blur(6px)}
+.prod-list-item:hover{border-color:var(--border2)}
+.prod-list-img{width:52px;height:52px;border-radius:var(--r2);object-fit:cover;background:var(--bg3);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px}
+.prod-list-info{flex:1;min-width:0}
+.prod-list-name{font-size:13px;font-weight:500;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prod-list-cat{font-size:11px;color:var(--text2)}
+.prod-list-stats{display:flex;gap:20px;flex-shrink:0}
+.prod-stat-col{text-align:right}
+.prod-stat-col .val{font-size:13px;font-weight:600}
+.prod-stat-col .lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.3px}
+.prod-list-actions{display:flex;gap:6px;flex-shrink:0}
+
+/* ── PAGINATION ── */
+.pagination{display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 0 4px}
+.page-btn{width:32px;height:32px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;color:var(--text2);transition:all .15s}
+.page-btn:hover{border-color:var(--green);color:var(--green)}
+.page-btn.active{background:var(--green3);border-color:var(--green);color:var(--green);font-weight:600}
+.page-btn:disabled{opacity:.3;cursor:not-allowed}
+.page-info{font-size:12px;color:var(--text2)}
+
+/* ── MODAL DETAIL PRODUK ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;backdrop-filter:blur(4px)}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:#13161d;border:1px solid var(--border2);border-radius:16px;width:540px;max-width:90vw;max-height:88vh;overflow-y:auto;transform:translateY(20px);transition:transform .2s}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--border)}
+.modal-title{font-family:var(--font-head);font-size:16px;font-weight:600}
+.modal-close{width:28px;height:28px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text2);line-height:1}
+.modal-body{padding:20px}
+.modal-img{width:100%;border-radius:var(--r);background:var(--bg3);aspect-ratio:16/9;object-fit:cover;margin-bottom:16px;display:block}
+.modal-img-placeholder{width:100%;border-radius:var(--r);background:var(--bg3);aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:64px;margin-bottom:16px}
+.modal-prod-name{font-family:var(--font-head);font-size:18px;font-weight:700;margin-bottom:4px}
+.modal-prod-cat{font-size:12px;color:var(--text2);margin-bottom:16px}
+.modal-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.modal-stat{background:var(--bg3);border-radius:var(--r2);padding:10px;text-align:center}
+.modal-stat .v{font-size:16px;font-weight:700;font-family:var(--font-head)}
+.modal-stat .l{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-top:3px}
+.modal-desc{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px}
+.modal-link-section{background:var(--bg3);border-radius:var(--r2);padding:12px;margin-bottom:16px}
+.modal-link-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
+.modal-link-row{display:flex;align-items:center;gap:8px}
+.modal-link-url{flex:1;font-size:11px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn-copy{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:11px;color:var(--text2);cursor:pointer;white-space:nowrap;transition:all .15s}
+.btn-copy:hover{border-color:var(--green);color:var(--green)}
+.btn-copy.copied{background:var(--green3);border-color:var(--green);color:var(--green)}
+.btn-goto{width:100%;background:var(--green);color:#0d0f14;font-family:var(--font-body);font-size:13px;font-weight:600;border:none;border-radius:var(--r2);padding:11px;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-goto:hover{background:var(--green2)}
+
+/* ── LOADING / EMPTY ── */
+.skeleton{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg2) 50%,var(--bg3) 75%);background-size:400% 100%;animation:shimmer 1.4s infinite}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text2)}
+.empty-icon{font-size:48px;margin-bottom:12px}
+.empty-text{font-size:15px;font-weight:500;margin-bottom:6px;color:var(--text)}
+.empty-sub{font-size:13px}
+.loading-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.skel-card{border-radius:var(--r);overflow:hidden;border:1px solid var(--border)}
+.skel-img{aspect-ratio:1;width:100%}
+.skel-body{padding:12px;display:flex;flex-direction:column;gap:8px}
+.skel-line{height:12px;border-radius:4px}
+.skel-line.short{width:60%}
+.notif-dot{position:absolute;top:6px;right:7px;width:6px;height:6px;background:var(--pink);border-radius:50%;border:1.5px solid var(--bg)}
+.toast{position:fixed;bottom:24px;right:24px;background:#1a1e27;border:1px solid var(--green);border-radius:var(--r2);padding:10px 16px;font-size:13px;color:var(--green);z-index:200;transform:translateY(20px);opacity:0;transition:all .25s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+</style>
+</head>
+<body>
+<div class="shell">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 18 18" fill="none"><path d="M3 9l4 4L15 5" stroke="#0d0f14" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div>
+        <div class="logo-name">AffiliPro</div>
+        <div class="logo-sub">Analytics Hub</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="nav-section">Main</div>
+      <a class="nav-item" href="index.html"><span class="nav-dot"></span>Overview</a>
+      <a class="nav-item active" href="products.html"><span class="nav-dot"></span>Products<span class="nav-badge" id="nav-total">—</span></a>
+      <a class="nav-item" href="#"><span class="nav-dot"></span>Trending</a>
+      <a class="nav-item" href="#"><span class="nav-dot"></span>Analytics</a>
+      <div class="nav-section">Integrations</div>
+      <a class="nav-item" href="#"><span class="nav-dot"></span>Shopee Sync</a>
+      <a class="nav-item" href="#"><span class="nav-dot"></span>Social Media</a>
+      <div class="nav-section">Tools</div>
+      <a class="nav-item" href="#"><span class="nav-dot"></span>Categories</a>
+      <a class="nav-item" href="#"><span class="nav-dot"></span>Reports</a>
+      <a class="nav-item" href="#"><span class="nav-dot"></span>Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="avatar-row">
+        <div class="avatar">BYS</div>
+        <div class="avatar-info">
+          <div class="avatar-name">BANG YOSS</div>
+          <div class="avatar-role">Affiliate Seller</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title">Products</div>
+      <div class="search-box">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#4a5568" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#4a5568" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <input id="search-input" placeholder="Cari produk, kategori...">
+      </div>
+      <select class="period-select" id="sort-select">
+        <option value="sold">Sort: Terlaris</option>
+        <option value="clicks">Sort: Klik Terbanyak</option>
+        <option value="cvr">Sort: CVR Tertinggi</option>
+        <option value="price">Sort: Harga</option>
+      </select>
+      <div class="view-toggle">
+        <div class="view-btn active" id="view-grid" title="Grid View">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" stroke="#8892a4" stroke-width="1.5"/><rect x="9" y="2" width="5" height="5" rx="1" stroke="#8892a4" stroke-width="1.5"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="#8892a4" stroke-width="1.5"/><rect x="9" y="9" width="5" height="5" rx="1" stroke="#8892a4" stroke-width="1.5"/></svg>
+        </div>
+        <div class="view-btn" id="view-list" title="List View">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h12M2 12h12" stroke="#8892a4" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+      <div class="topbar-btn" style="position:relative">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2C5.24 2 3 4.24 3 7c0 1.7.86 3.2 2.17 4.1L4 14h8l-1.17-2.9A4.96 4.96 0 0013 7c0-2.76-2.24-5-5-5z" stroke="#8892a4" stroke-width="1.5"/></svg>
+        <div class="notif-dot"></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- MINI STATS -->
+      <div class="mini-stats">
+        <div class="mini-stat">
+          <div class="mini-stat-label">Total Produk</div>
+          <div class="mini-stat-val" id="ms-total" style="color:var(--blue)">—</div>
+          <div class="mini-stat-sub">Semua kategori</div>
+        </div>
+        <div class="mini-stat">
+          <div class="mini-stat-label">Ditampilkan</div>
+          <div class="mini-stat-val" id="ms-shown" style="color:var(--green)">—</div>
+          <div class="mini-stat-sub">Filter aktif</div>
+        </div>
+        <div class="mini-stat">
+          <div class="mini-stat-label">Terjual (bulan ini)</div>
+          <div class="mini-stat-val" id="ms-sold" style="color:var(--purple)">—</div>
+          <div class="mini-stat-sub">Semua produk</div>
+        </div>
+        <div class="mini-stat">
+          <div class="mini-stat-label">Total Klik</div>
+          <div class="mini-stat-val" id="ms-clicks" style="color:var(--amber)">—</div>
+          <div class="mini-stat-sub">Dari semua sosmed</div>
+        </div>
+      </div>
+
+      <!-- FILTER BAR -->
+      <div class="filter-bar">
+        <span class="filter-label">Kategori:</span>
+        <div class="cat-pills" id="cat-pills">
+          <div class="cat-pill active" data-cat="all">Semua</div>
+          <!-- diisi dinamis dari API -->
+        </div>
+      </div>
+
+      <!-- PRODUCT CONTAINER -->
+      <div id="product-container">
+        <!-- Loading skeleton -->
+        <div class="loading-grid" id="loading-skeleton">
+          ${[...Array(8)].map(()=>`
+          <div class="skel-card">
+            <div class="skel-img skeleton"></div>
+            <div class="skel-body">
+              <div class="skel-line skeleton"></div>
+              <div class="skel-line short skeleton"></div>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <!-- PAGINATION -->
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETAIL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-prod-title">Detail Produk</div>
+      <div class="modal-close" id="modal-close">✕</div>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════
+const state = {
+  view:       'grid',    // 'grid' | 'list'
+  category:   'all',
+  sort:       'sold',
+  search:     '',
+  page:       1,
+  limit:      24,
+  total:      0,
+  pages:      0,
+  products:   [],
+  allTotal:   0,
+  totalSold:  0,
+  totalClicks:0,
+};
+
+// ══════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadCategories();
+  await loadProducts();
+  loadMiniStats();
+  bindEvents();
+});
+
+// ══════════════════════════════════════════════════════════
+// LOAD DATA
+// ══════════════════════════════════════════════════════════
+async function loadCategories() {
+  try {
+    const data = await AffiliAPI.getCategories();
+    const pills = document.getElementById('cat-pills');
+    if (data.categories) {
+      data.categories.forEach(c => {
+        const d = document.createElement('div');
+        d.className = 'cat-pill';
+        d.dataset.cat = c.name;
+        d.textContent = `${c.name} (${c.count})`;
+        d.onclick = () => selectCat(c.name);
+        pills.appendChild(d);
+      });
+    }
+  } catch(e) { console.warn('categories error', e); }
+}
+
+async function loadProducts() {
+  showSkeleton(true);
+  try {
+    const params = {
+      category: state.category,
+      sort:     state.sort,
+      search:   state.search,
+      page:     state.page,
+      limit:    state.limit,
+    };
+    const data = await AffiliAPI.getProducts(params);
+    state.products = data.products || [];
+    state.total    = data.total    || 0;
+    state.pages    = data.pages    || 1;
+
+    // hitung total sold & clicks dari produk yang dimuat
+    state.totalSold   = state.products.reduce((a,p)=>a+(Number(p.sold)||0),0);
+    state.totalClicks = state.products.reduce((a,p)=>a+(Number(p.clicks)||0),0);
+
+    renderProducts();
+    renderPagination();
+    updateMiniStats();
+    document.getElementById('nav-total').textContent = state.total;
+  } catch(e) {
+    showError('Gagal memuat produk. Pastikan backend sudah dikonfigurasi.');
+    console.error(e);
+  }
+  showSkeleton(false);
+}
+
+async function loadMiniStats() {
+  try {
+    const clicks = await AffiliAPI.getClicks();
+    const total  = clicks.total || 0;
+    document.getElementById('ms-clicks').textContent = _fmt(total);
+  } catch(e){}
+}
+
+// ══════════════════════════════════════════════════════════
+// RENDER PRODUCTS
+// ══════════════════════════════════════════════════════════
+function renderProducts() {
+  const container = document.getElementById('product-container');
+  if (!state.products.length) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">📦</div>
+        <div class="empty-text">Tidak ada produk ditemukan</div>
+        <div class="empty-sub">Coba ubah filter atau kata kunci pencarian</div>
+      </div>`;
+    return;
+  }
+  container.innerHTML = state.view === 'grid'
+    ? `<div class="product-grid">${state.products.map(renderGridCard).join('')}</div>`
+    : `<div class="product-list">${state.products.map(renderListItem).join('')}</div>`;
+}
+
+function renderGridCard(p) {
+  const imgHtml = p.image_url
+    ? `<img class="prod-card-img" src="${_esc(p.image_url)}" alt="${_esc(p.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+    : '';
+  const emoji = _catEmoji(p.category);
+  return `
+  <div class="prod-card" onclick="openModal('${_esc(p.id)}')">
+    <div class="prod-card-status">${_badgeHtml(p.status)}</div>
+    ${imgHtml}
+    <div class="prod-card-img-placeholder" style="${p.image_url?'display:none':''}">
+      ${emoji}
+    </div>
+    <div class="prod-card-body">
+      <div class="prod-card-name">${_esc(p.name)}</div>
+      <div class="prod-card-cat">${_esc(p.category)} · ${_esc(p.platform||'Shopee')}</div>
+      <div class="prod-card-stats">
+        <div class="prod-card-sold">Terjual <span>${_fmt(p.sold)}</span></div>
+        <div class="prod-card-cvr" style="color:${_cvrColor(p.cvr)}">${p.cvr||0}%</div>
+      </div>
+    </div>
+    <div class="prod-card-actions">
+      <button class="btn-affiliate" onclick="event.stopPropagation();trackAndGo('${_esc(p.id)}','${_esc(p.affiliate_link||'#')}')">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#0d0f14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Buka Shopee
+      </button>
+      <div class="btn-detail" title="Detail" onclick="event.stopPropagation();openModal('${_esc(p.id)}')">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5" stroke="#8892a4" stroke-width="1.5"/><path d="M8 6v4M8 5v.5" stroke="#8892a4" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderListItem(p) {
+  const emoji = _catEmoji(p.category);
+  const imgHtml = p.image_url
+    ? `<img src="${_esc(p.image_url)}" style="width:100%;height:100%;object-fit:cover;border-radius:var(--r2)" loading="lazy" onerror="this.outerHTML='${emoji}'">`
+    : emoji;
+  return `
+  <div class="prod-list-item" onclick="openModal('${_esc(p.id)}')">
+    <div class="prod-list-img">${imgHtml}</div>
+    <div class="prod-list-info">
+      <div class="prod-list-name">${_esc(p.name)}</div>
+      <div class="prod-list-cat">${_esc(p.category)} · ${_esc(p.platform||'Shopee')}</div>
+    </div>
+    <div class="prod-list-stats">
+      <div class="prod-stat-col">
+        <div class="val">${_fmt(p.sold)}</div>
+        <div class="lbl">Terjual</div>
+      </div>
+      <div class="prod-stat-col">
+        <div class="val">${_fmt(p.clicks)}</div>
+        <div class="lbl">Klik</div>
+      </div>
+      <div class="prod-stat-col">
+        <div class="val" style="color:${_cvrColor(p.cvr)}">${p.cvr||0}%</div>
+        <div class="lbl">CVR</div>
+      </div>
+      <div class="prod-stat-col">
+        ${_badgeHtml(p.status)}
+      </div>
+    </div>
+    <div class="prod-list-actions">
+      <button class="btn-affiliate" onclick="event.stopPropagation();trackAndGo('${_esc(p.id)}','${_esc(p.affiliate_link||'#')}')">Shopee</button>
+    </div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════════════════
+// PAGINATION
+// ══════════════════════════════════════════════════════════
+function renderPagination() {
+  const el = document.getElementById('pagination');
+  if (state.pages <= 1) { el.innerHTML=''; return; }
+  const p = state.page, total = state.pages;
+  let html = `
+    <button class="page-btn" onclick="goPage(${p-1})" ${p<=1?'disabled':''}>‹</button>`;
+  for (let i = Math.max(1,p-2); i <= Math.min(total,p+2); i++) {
+    html += `<button class="page-btn ${i===p?'active':''}" onclick="goPage(${i})">${i}</button>`;
+  }
+  html += `<button class="page-btn" onclick="goPage(${p+1})" ${p>=total?'disabled':''}>›</button>
+    <span class="page-info">&nbsp;Halaman ${p} dari ${total}</span>`;
+  el.innerHTML = html;
+}
+
+function goPage(n) {
+  if (n < 1 || n > state.pages) return;
+  state.page = n;
+  loadProducts();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ══════════════════════════════════════════════════════════
+// MODAL DETAIL
+// ══════════════════════════════════════════════════════════
+function openModal(id) {
+  const p = state.products.find(x => x.id == id);
+  if (!p) return;
+  document.getElementById('modal-prod-title').textContent = p.name;
+  const emoji = _catEmoji(p.category);
+  const imgHtml = p.image_url
+    ? `<img class="modal-img" src="${_esc(p.image_url)}" alt="${_esc(p.name)}" onerror="this.outerHTML='<div class=modal-img-placeholder>${emoji}</div>'">`
+    : `<div class="modal-img-placeholder">${emoji}</div>`;
+  document.getElementById('modal-body').innerHTML = `
+    ${imgHtml}
+    <div class="modal-prod-name">${_esc(p.name)}</div>
+    <div class="modal-prod-cat">${_esc(p.category)} · ${_esc(p.platform||'Shopee')}</div>
+    <div class="modal-stats-grid">
+      <div class="modal-stat"><div class="v" style="color:var(--green)">${_fmt(p.sold)}</div><div class="l">Terjual</div></div>
+      <div class="modal-stat"><div class="v" style="color:var(--blue)">${_fmt(p.clicks)}</div><div class="l">Klik</div></div>
+      <div class="modal-stat"><div class="v" style="color:${_cvrColor(p.cvr)}">${p.cvr||0}%</div><div class="l">CVR</div></div>
+      <div class="modal-stat"><div class="v" style="color:var(--amber)">${p.price?'Rp'+_fmtRp(p.price):'—'}</div><div class="l">Harga</div></div>
+    </div>
+    ${p.description ? `<div class="modal-desc">${_esc(p.description)}</div>` : ''}
+    <div class="modal-link-section">
+      <div class="modal-link-label">Link Affiliate</div>
+      <div class="modal-link-row">
+        <div class="modal-link-url" id="modal-link-url">${_esc(p.affiliate_link||'Belum ada link')}</div>
+        ${p.affiliate_link ? `<button class="btn-copy" onclick="copyLink('${_esc(p.affiliate_link)}')">Salin</button>` : ''}
+      </div>
+    </div>
+    ${p.affiliate_link ? `
+    <button class="btn-goto" onclick="trackAndGo('${_esc(p.id)}','${_esc(p.affiliate_link)}');closeModal()">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#0d0f14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Buka di Shopee
+    </button>` : ''}
+  `;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+// ══════════════════════════════════════════════════════════
+// ACTIONS
+// ══════════════════════════════════════════════════════════
+async function trackAndGo(id, link) {
+  if (!link || link==='#') return showToast('Link belum tersedia');
+  try { await AffiliAPI.trackClick(id, link); }
+  catch(e) { window.open(link,'_blank'); }
+}
+
+function copyLink(url) {
+  navigator.clipboard.writeText(url).then(()=>{
+    const btn = document.querySelector('.btn-copy');
+    if(btn){btn.textContent='✓ Disalin';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Salin';btn.classList.remove('copied')},2000);}
+    showToast('Link berhasil disalin!');
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+// EVENTS
+// ══════════════════════════════════════════════════════════
+function bindEvents() {
+  // Search
+  let searchTimer;
+  document.getElementById('search-input').addEventListener('input', e => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(()=>{
+      state.search = e.target.value;
+      state.page = 1;
+      loadProducts();
+    }, 400);
+  });
+
+  // Sort
+  document.getElementById('sort-select').addEventListener('change', e => {
+    state.sort = e.target.value;
+    state.page = 1;
+    loadProducts();
+  });
+
+  // View toggle
+  document.getElementById('view-grid').onclick = () => setView('grid');
+  document.getElementById('view-list').onclick = () => setView('list');
+
+  // Modal close
+  document.getElementById('modal-close').onclick = closeModal;
+  document.getElementById('modal-overlay').onclick = e => {
+    if (e.target === document.getElementById('modal-overlay')) closeModal();
+  };
+  document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
+}
+
+function selectCat(cat) {
+  state.category = cat;
+  state.page = 1;
+  document.querySelectorAll('.cat-pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.cat === cat);
+  });
+  loadProducts();
+}
+
+function setView(v) {
+  state.view = v;
+  document.getElementById('view-grid').classList.toggle('active', v==='grid');
+  document.getElementById('view-list').classList.toggle('active', v==='list');
+  renderProducts();
+}
+
+function updateMiniStats() {
+  document.getElementById('ms-total').textContent = _fmt(state.total);
+  document.getElementById('ms-shown').textContent = _fmt(state.products.length);
+  document.getElementById('ms-sold').textContent  = _fmt(state.totalSold);
+}
+
+// ══════════════════════════════════════════════════════════
+// UI HELPERS
+// ══════════════════════════════════════════════════════════
+function showSkeleton(show) {
+  const sk = document.getElementById('loading-skeleton');
+  if (sk) sk.style.display = show ? '' : 'none';
+  if (!show) {
+    const old = document.getElementById('loading-skeleton');
+    if (old) old.remove();
+  }
+}
+function showError(msg) {
+  document.getElementById('product-container').innerHTML = `
+    <div class="empty-state">
+      <div class="empty-icon">⚠️</div>
+      <div class="empty-text">Terjadi Kesalahan</div>
+      <div class="empty-sub">${msg}</div>
+    </div>`;
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+function _badgeHtml(status) {
+  const s = (status||'').toLowerCase();
+  if (s==='naik'||s==='aktif') return `<span class="badge badge-up">↑ Naik</span>`;
+  if (s==='turun')              return `<span class="badge badge-down">↓ Turun</span>`;
+  return `<span class="badge badge-mid">→ Stabil</span>`;
+}
+function _cvrColor(cvr) {
+  const n = parseFloat(cvr)||0;
+  if (n >= 14) return 'var(--green)';
+  if (n >= 10) return 'var(--amber)';
+  return 'var(--pink)';
+}
+function _catEmoji(cat) {
+  const c = (cat||'').toLowerCase();
+  if (c.includes('fashion'))    return '👗';
+  if (c.includes('elektro'))    return '🎧';
+  if (c.includes('beauty'))     return '💄';
+  if (c.includes('gadget'))     return '📱';
+  if (c.includes('kuliner'))    return '🍜';
+  if (c.includes('sport'))      return '⚽';
+  return '🛍️';
+}
+function _fmt(n) {
+  if (n===undefined||n===null||n==='') return '—';
+  const num = parseFloat(n);
+  if (isNaN(num)) return n;
+  if (num>=1000000) return (num/1000000).toFixed(1)+'jt';
+  if (num>=1000)    return (num/1000).toFixed(1)+'rb';
+  return num.toLocaleString('id-ID');
+}
+function _fmtRp(n) {
+  const num = parseFloat(n)||0;
+  if (num>=1000000) return (num/1000000).toFixed(1)+' jt';
+  if (num>=1000)    return (num/1000).toFixed(0)+' rb';
+  return num.toLocaleString('id-ID');
+}
+function _esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+</script>
+</body>
+</html>
